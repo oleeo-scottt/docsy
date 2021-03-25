@@ -1,4 +1,6 @@
 {{ $original := .Get "src" }}
+{{ $use_pkce := .Get "use_pkce" }}
+{{ $client_id := .Get "client_id" }}
 <div id="ohpen_swagger_ui"></div>
 <script>
   var resolveUrl = function () {
@@ -9,6 +11,7 @@
     }
     return passedUrl;
   };
+
   window.onload = function () {
     const ui = SwaggerUIBundle({
       url: resolveUrl(),
@@ -18,6 +21,13 @@
         SwaggerUIStandalonePreset
       ]
     });
+
+    var usePkce = '{{ $use_pkce }}' === "true";
+    ui.initOAuth({
+      usePkceWithAuthorizationCodeGrant: usePkce,
+      clientId: '{{ $client_id }}'
+    });
+
     window.ui = ui;
   };
 </script>
